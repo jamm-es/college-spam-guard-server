@@ -42,15 +42,30 @@ mongoose
             return res.status(500).json({ message: 'Internal server error' });
           }
 
-          return res.status(200).json({ message: 'Success' });
-        })
+          if(req.body.domain !== undefined) {
+            UnknownSchool
+              .deleteOne({ url: req.body.domain })
+              .exec(err => {
+                if(err) {
+                  console.log('/whitelisted-emails - Internal server error')
+                  console.log(err);
+                  return res.status(500).json({ message: 'Internal server error' });
+                }
+
+                return res.status(200).json({ message: 'Success' })
+              });
+          }
+          else {
+            return res.status(200).json({ message: 'Success' });
+          }
+        });
     });
 
 
     // admin panel, add college url
     app.post('/college-urls', (req, res) => {
       if(req.headers.authorization !== undefined && req.headers.authorization !== `Basic ${adminPass.password}`) {
-        console.log('/whitelisted-emails - Unauthorized');
+        console.log('/college-urls - Unauthorized');
         console.log('Headers:')
         console.log(JSON.stringify(req.headers, null, '\t'));
         return res.status(401).json({ message: 'Unauthorized' });
@@ -59,12 +74,27 @@ mongoose
       new CollegeURL(req.body)
         .save((err: Error) => {
           if(err) {
-            console.log('/whitelisted-emails - Internal server error')
+            console.log('/college-urls- Internal server error')
             console.log(err);
             return res.status(500).json({ message: 'Internal server error' });
           }
 
-          return res.status(200).json({ message: 'Success' });
+          if(req.body.url !== undefined) {
+            UnknownSchool
+              .deleteOne({ url: req.body.url })
+              .exec(err => {
+                if(err) {
+                  console.log('/college-urls - Internal server error')
+                  console.log(err);
+                  return res.status(500).json({ message: 'Internal server error' });
+                }
+
+                return res.status(200).json({ message: 'Success' })
+              });
+          }
+          else {
+            return res.status(200).json({ message: 'Success' });
+          }
         })
     });
 
