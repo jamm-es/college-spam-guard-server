@@ -79,22 +79,17 @@ mongoose
             return res.status(500).json({ message: 'Internal server error' });
           }
 
-          if(req.body.url !== undefined) {
-            UnknownSchool
-              .deleteOne({ url: req.body.url })
-              .exec(err => {
-                if(err) {
-                  console.log('/college-urls - Internal server error')
-                  console.log(err);
-                  return res.status(500).json({ message: 'Internal server error' });
-                }
+          UnknownSchool
+            .deleteOne({ url: req.body.url })
+            .exec(err => {
+              if(err) {
+                console.log('/college-urls - Internal server error')
+                console.log(err);
+                return res.status(500).json({ message: 'Internal server error' });
+              }
 
-                return res.status(200).json({ message: 'Success' })
-              });
-          }
-          else {
-            return res.status(200).json({ message: 'Success' });
-          }
+              return res.status(200).json({ message: 'Success' })
+            });
         })
     });
 
